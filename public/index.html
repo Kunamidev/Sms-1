@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send SMS</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+header {
+    background: #007bff;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+main {
+    padding: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 10px 0 5px;
+}
+
+input {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+#spinner {
+    display: none;
+    text-align: center;
+    margin: 20px 0;
+}
+
+#response {
+    white-space: pre-wrap;
+    background: #fafafa;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+footer {
+    background: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    button {
+        font-size: 0.9rem;
+    }
+}
+        
+    </style>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-sms"></i> Send SMS</h1>
+        </header>
+        <main>
+            <form id="smsForm">
+                <label for="number">Phone Number:</label>
+                <input type="text" id="number" name="number" required>
+                
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" required>
+                
+                <label for="delay">Delay (ms):</label>
+                <input type="number" id="delay" name="delay" required>
+                
+                <button type="submit">Send SMS</button>
+            </form>
+            <div id="spinner" class="spinner"><i class="fas fa-spinner fa-spin"></i></div>
+            <div id="response"></div>
+        </main>
+        <footer>
+            <p>&copy; 2024 HeruDev. All rights reserved</p>
+        </footer>
+    </div>
+    <script>
+        document.getElementById('smsForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const number = document.getElementById('number').value;
+            const amount = document.getElementById('amount').value;
+            const delay = document.getElementById('delay').value;
+            const spinner = document.getElementById('spinner');
+            const responseDiv = document.getElementById('response');
+            spinner.style.display = 'block';
+            responseDiv.innerHTML = '';
+            try {
+                const response = await fetch(`/send-sms?number=${number}&amount=${amount}&delay=${delay}`);
+                const data = await response.json();
+                responseDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                responseDiv.innerHTML = 'Error sending SMS';
+            }
+            spinner.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
