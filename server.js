@@ -8,7 +8,7 @@ app.use(express.static('public'));
 app.get('/send-sms', async (req, res) => {
     const { number, amount, delay } = req.query;
     try {
-        const response = await axios.get(`https://deku-rest-api-ywad.onrender.com/smsb`, {
+        const response = await axios.get(`https://joshweb.click/smsb`, {
             params: { number, amount, delay }
         });
         res.json(response.data);
